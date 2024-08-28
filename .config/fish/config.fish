@@ -11,6 +11,7 @@ if status is-interactive
     alias venv=". ./.venv/bin/activate.fish"
     alias nopycache="export PYTHONDONTWRITEBYTECODE=1"
     alias py="python3.12"
+    alias gits="git status"
 
     # eza aliases. Requires eza.
     alias eza_base="eza --classify auto --icons auto --hyperlink --color auto --group-directories-first"
@@ -18,15 +19,12 @@ if status is-interactive
     alias ll="eza_base -l --header --no-permissions --no-user"
     alias la="ls -A"
     alias lla="ll -A"
-end
 
-# Setup autocompletion for eza aliases. Requires eza.
-function link_eza_completions
-    for alias_name in $argv
-        complete --command $alias_name --wraps eza
-    end
+    # Setup autocompletion for eza aliases. Requires eza.
+    complete --command ls --wraps eza
+    complete --command la --wraps eza
+    complete --command ll --wraps eza
 end
-link_eza_completions ls la ll
 
 # Create a directory and cd into it.
 function md
@@ -100,9 +98,55 @@ function rename_extension
     end
 end
 
-### Fish syntax highlighting
+# A utility function which renames the given array of files
+function rename_file_array -a file_array
+    echo "Renaming"
+    echo $file_array
+    if test (count $argv) -gt 1
+        for filename in $argv
+            echo $filename
+            set newname (echo $filename | sed 's/[|:\/\\]/-/g')
+            set newname (echo $newname | sed 's/[?*<>"]//g')
+            set newname (echo $newname | sed 's/  */ /g')
+            if test "$filename" != "$newname"
+                mv "$filename" "$newname"
+                echo "Renamed '$filename' to '$newname'"
+            else
+                echo "No renaming needed for '$filename'"
+            end
+        end
+    else
+        echo "File array not provided"
+    end
+end
 
-# set -g fish_color_autosuggestion '555'  'brblack'
+# Rename files to be NTFS-compatible
+function rename_for_windows
+    # Check if the --all flag is provided
+    if test $argv[1] = "--all"
+        # If a directory path is provided with --all, use that directory
+        if test (count $argv) -gt 2
+            for i in $argv
+                echo $i
+            end
+            echo "dir is $argv[2]"
+            set target_dir $argv[2]
+        else
+            echo "Current dir"
+            # If no directory is specified, use the current directory
+            set target_dir "."
+        end
+
+        # Get all files in the specified directory and rename them
+        rename_file_array (find $target_dir -maxdepth 1 -type f | sed 's|^\./||')
+    else
+        # Use the provided filenames
+        rename_file_array $argv
+    end
+end
+
+### Fish syntax highlighting
+set -g fish_color_autosuggestion '555'  'brblack'
 # set -g fish_color_cancel -r
 set -g fish_color_command brcyan --bold --italics
 # set -g fish_color_comment red
