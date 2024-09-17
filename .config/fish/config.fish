@@ -7,11 +7,13 @@ if status is-interactive
     # Set default node version in nvm.fish. Requires nvm.fish plugin, not nvm itself.
     set -U nvm_default_version v20.14.0
 
-    # Some common aliases I use frequently.
+    # Some common aliases and abbreviations I use frequently.
+    abbr -a gits git status
+    abbr -a gitc git commit -m
+    abbr -a py python3.12
+
     alias venv=". ./.venv/bin/activate.fish"
     alias nopycache="export PYTHONDONTWRITEBYTECODE=1"
-    alias py="python3.12"
-    alias gits="git status"
 
     # eza aliases. Requires eza.
     alias eza_base="eza --classify auto --icons auto --hyperlink --color auto --group-directories-first"

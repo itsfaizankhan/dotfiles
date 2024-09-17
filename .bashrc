@@ -115,3 +115,15 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# Start Starship
+eval "$(starship init bash)"
+
+# eza aliases. Requires eza.
+alias eza_base="eza --classify auto --icons auto --hyperlink --color auto --group-directories-first"
+alias ls="eza_base"
+alias ll="eza_base -l --header --no-permissions --no-user"
+alias la="ls -A"
+alias lla="ll -A"
+
+
