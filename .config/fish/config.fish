@@ -11,6 +11,8 @@ if status is-interactive
     abbr -a gits git status
     abbr -a gitc git commit -m
     abbr -a py python3.12
+    abbr -a sudu sudo apt update
+    abbr -a sudup sudo apt upgrade
 
     alias venv=". ./.venv/bin/activate.fish"
     alias nopycache="export PYTHONDONTWRITEBYTECODE=1"
