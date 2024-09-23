@@ -1,7 +1,13 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
-export PATH="$PATH:/opt/nvim-linux64/bin"
+
+# Add NeoVim to path if it is installed
+# export PATH="$PATH:/opt/nvim-linux64/bin"
+if [ -d "/opt/nvim-linux64/" ] ; then
+    PATH="$PATH:/opt/nvim-linux64/bin"
+fi
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
