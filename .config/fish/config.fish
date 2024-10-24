@@ -7,7 +7,7 @@ if status is-interactive
     # Set default node version in nvm.fish. Requires nvm.fish plugin, not nvm itself.
     set -U nvm_default_version v20.14.0
 
-    # Some common aliases and abbreviations I use frequently.
+    # Some common aliases and abbreviations I use frequently. Requires mentioned programs/tools.
     abbr -a gits git status
     abbr -a gitc git commit -m
     abbr -a py python3.12
@@ -30,11 +30,46 @@ if status is-interactive
     complete --command ll --wraps eza
 end
 
+# Fetch and save all directories matching with the provided name from remote repo.
+# BUG: Clones all the subdirectories which matches with the given query.
+# Example: Cloning "examples" directory from a repo will clone `examples` and `docs/examples`.
+functio git-clone-subdirectory -a link -a repo_subdir
+    # set --show link subdir argv
+    git clone -n --depth=1 --filter=tree:0 $link
+
+    # trim trailing ".git" if it exists.
+    set -l link (string replace .git '' $link)
+    # Extract repo name from link.
+    set -l repo_name (string match -rg '\/.*\/(.*)$' $link)
+
+    printf 'Cloning directory %s into %s from %s\n' $repo_subdir $repo_name $link
+
+    cd $repo_name
+    git sparse-checkout set --no-cone $repo_subdir
+    git checkout
+end
+
 # Create a directory and cd into it.
-function md
+function md --description "md - Create a directory and change into it."
+    set -l _help_msg "md - Create a directory and change into it.
+Usage:
+    md <directory>
+
+Description:
+    The `md` command creates the specified directory and immediately changes
+    into it. If the directory already exists, it will simply change into it."
+
+    argparse "h/help" -- $argv
+    or return
+
+    if set -q _flag_help
+        echo $_help_msg
+        return 0
+    end
+
     # Check if exactly one argument is provided
     if test (count $argv) -ne 1
-        echo "Usage: md <directory>"
+        echo $_help_msg
         return 1
     end
 
@@ -102,7 +137,7 @@ function rename_extension
     end
 end
 
-# A utility function which renames the given array of files
+# A utility function which renames the given array of files such that filename is NTFS-compatible
 function rename_file_array -a file_array
     echo "Renaming"
     echo $file_array

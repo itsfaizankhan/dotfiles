@@ -1,5 +1,6 @@
 -- Colours from https://github.com/tokyo-night/tokyo-night-vscode-theme
 local wezterm = require("wezterm")
+local action = wezterm.action
 local config = wezterm.config_builder()
 
 config.color_scheme = "Tokyo Night Storm"
@@ -19,5 +20,24 @@ config.window_padding = {
 wezterm.on("format-window-title", function(tab)
 	return tab.active_pane.title
 end)
+
+config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
+config.keys = {
+	{
+		key = "v",
+		mods = "LEADER",
+		action = action.SplitHorizontal { domain = "CurrentPaneDomain" },
+	},
+	{
+		key = "s",
+		mods = "LEADER",
+		action = action.SplitVertical { domain = "CurrentPaneDomain" },
+	},
+	{
+		key = "w",
+		mods = "LEADER|CTRL",
+		action = action.SendKey { key = "w", mods = "CTRL" },
+	}
+}
 
 return config
