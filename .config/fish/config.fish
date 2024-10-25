@@ -33,7 +33,7 @@ end
 # Fetch and save all directories matching with the provided name from remote repo.
 # BUG: Clones all the subdirectories which matches with the given query.
 # Example: Cloning "examples" directory from a repo will clone `examples` and `docs/examples`.
-functio git-clone-subdirectory -a link -a repo_subdir
+function git-clone-subdirectory -a link -a repo_subdir
     # set --show link subdir argv
     git clone -n --depth=1 --filter=tree:0 $link
 
