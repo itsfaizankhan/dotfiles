@@ -10,7 +10,7 @@ if status is-interactive
     # Some common aliases and abbreviations I use frequently. Requires mentioned programs/tools.
     abbr -a gits git status
     abbr -a gitc git commit -m
-    abbr -a py python3.12
+    abbr -a py python3.13
     abbr -a sudu sudo apt update
     abbr -a sudup sudo apt upgrade
 
