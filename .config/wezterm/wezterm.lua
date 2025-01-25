@@ -9,7 +9,8 @@ config.use_fancy_tab_bar = false
 config.enable_scroll_bar = true
 config.colors = { scrollbar_thumb = "#9aa5ce" }
 config.command_palette_bg_color = "#343b58"
-config.window_background_opacity = 0.9
+config.audible_bell = "Disabled"
+-- config.window_background_opacity = 0.9
 config.window_padding = {
 	left = 0,
 	right = 0,
@@ -18,7 +19,7 @@ config.window_padding = {
 }
 
 wezterm.on("format-window-title", function(tab)
-	return tab.active_pane.title
+	return "WezTerm - " .. tab.active_pane.title
 end)
 
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
@@ -26,18 +27,18 @@ config.keys = {
 	{
 		key = "v",
 		mods = "LEADER",
-		action = action.SplitHorizontal { domain = "CurrentPaneDomain" },
+		action = action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
 	},
 	{
 		key = "s",
 		mods = "LEADER",
-		action = action.SplitVertical { domain = "CurrentPaneDomain" },
+		action = action.SplitVertical({ domain = "CurrentPaneDomain" }),
 	},
 	{
 		key = "w",
 		mods = "LEADER|CTRL",
-		action = action.SendKey { key = "w", mods = "CTRL" },
-	}
+		action = action.SendKey({ key = "w", mods = "CTRL" }),
+	},
 }
 
 return config
